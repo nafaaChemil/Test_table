@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import Datatable from "./datatable";
 import "./datatable/table.css";
 
+// Import du css
 import "./index.css";
 
 require("es6-promise").polyfill();
