@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react";
+
+// Data table component
 import Datatable from "./datatable";
 import "./datatable/table.css";
 
