@@ -4,6 +4,8 @@ import paginationFactory from "react-bootstrap-table2-paginator";
 import ToolkitProvider, { Search } from "react-bootstrap-table2-toolkit";
 import { Modal, Button } from "react-bootstrap";
 
+import "./table.css";
+
 export default function Table() {
 	const [data, setData] = useState([]);
 
@@ -14,7 +16,7 @@ export default function Table() {
 			serviceOffer: "Applicatif",
 			status: "ACCEPTED",
 			teamsUrl: null,
-			isManager: 0,
+			isManager: 1,
 		},
 		2: {
 			id: 2,
@@ -117,15 +119,36 @@ export default function Table() {
 	const { SearchBar } = Search;
 
 	const columns = [
-		{ dataField: "label", text: "Projet", sort: true },
+		{
+			dataField: "label",
+			text: "Projet",
+			sort: true,
+			headerStyle: { backgroundColor: "yellow" },
+		},
 		{ dataField: "serviceOffer", text: "Besoin", sort: true },
 		{ dataField: "status", text: "Status", sort: true },
 		{ dataField: "teamsUrl", text: "Teams" },
+		{ dataField: "isManager", text: "Chef de projet", hidden: true },
 	];
 
 	const rowEvents = {
+		// onMouseEnter: (e, row, cell) => {
+		// 	e.target.style.visibility = "hidden";
+		// },
+		// onMouseLeave: (e) => {
+		// 	//console.log(row.teamsUrl);
+		// 	e.target.style.visibility = "visible";
+		// },
+
 		onMouseEnter: (e, row) => {
-			console.log(row);
+			const Ligne = e.target.parentElement;
+			Ligne.classList.add("ligneTab");
+			console.log(e.target.parentElement);
+		},
+		onMouseLeave: (e, row) => {
+			const Ligne = e.target.parentElement;
+			Ligne.classList.remove("ligneTab");
+			console.log(e.target.parentElement);
 		},
 	};
 
