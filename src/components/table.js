@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import BootstrapTable from "react-bootstrap-table-next";
 import paginationFactory from "react-bootstrap-table2-paginator";
+import ToolkitProvider, { Search } from "react-bootstrap-table2-toolkit";
 import { Modal, Button } from "react-bootstrap";
 
 export default function Table() {
@@ -113,6 +114,8 @@ export default function Table() {
 		setData(objArr);
 	};
 
+	const { SearchBar } = Search;
+
 	const columns = [
 		{ dataField: "label", text: "Projet", sort: true },
 		{ dataField: "serviceOffer", text: "Besoin", sort: true },
@@ -132,7 +135,7 @@ export default function Table() {
 
 	return (
 		<div className="App">
-			<BootstrapTable
+			{/* <BootstrapTable
 				bootstrap4
 				keyField="id"
 				data={data}
@@ -142,7 +145,37 @@ export default function Table() {
 				striped
 				hover
 				bordered={false}
-			/>
+			/> */}
+
+			<ToolkitProvider
+				bootstrap4
+				keyField="id"
+				data={data}
+				columns={columns}
+				search="Hello"
+				noDataIndication="Table is Empty"
+			>
+				{(props) => (
+					<div>
+						<SearchBar
+							{...props.searchProps}
+							className="custome-search-field"
+							style={{ color: "blue" }}
+							delay={50}
+							placeholder="Rechercher"
+						/>
+						<hr />
+						<BootstrapTable
+							{...props.baseProps}
+							striped
+							hover
+							bordered={false}
+							pagination={paginationFactory()}
+							rowEvents={rowEvents}
+						/>
+					</div>
+				)}
+			</ToolkitProvider>
 		</div>
 	);
 }
