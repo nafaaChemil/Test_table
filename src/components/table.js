@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import BootstrapTable from "react-bootstrap-table-next";
 import paginationFactory from "react-bootstrap-table2-paginator";
 import ToolkitProvider, { Search } from "react-bootstrap-table2-toolkit";
-//import { Modal, Button } from "react-bootstrap";
+import { Modal, Button } from "react-bootstrap";
 
 import "./table.scss";
 
@@ -97,23 +97,6 @@ const fakeApi = {
 	},
 };
 
-// Colonnes du tableau
-const columns = [
-	{
-		dataField: "label",
-		text: "Projet",
-		sort: true,
-		headerStyle: { backgroundColor: "yellow" },
-	},
-	{ dataField: "serviceOffer", text: "Besoin", sort: true },
-	{ dataField: "status", text: "Status", sort: true },
-	{ dataField: "teamsUrl", text: "Teams" },
-	{
-		dataField: "isManager",
-		text: "Chef de projet",
-	},
-];
-
 // Transformation de l'objet en array itérable
 const objArr = Object.values(fakeApi);
 // const objArrRaw = JSON.stringify(objArr);
@@ -122,6 +105,66 @@ export default function Table() {
 	const [data, setData] = useState(objArr);
 	const [toggleCp, setToggleCp] = useState(false);
 	const [toggleArchi, setToggleArchi] = useState(false);
+
+	const editRequest = (cell, row, rowIndex, formatExtraData) => {
+		// return (
+		// 	<span>
+		// 		<strong style={{ color: "red" }}>{cell} </strong>
+		// 	</span>
+
+		// <Button
+		// 	onClick={() => {
+		// 		//  this.onFollowChanged(row);
+		// 		console.log("klfd");
+		// 	}}
+		// >
+		// 	{" "}
+		// 	Status
+		// </Button>
+		// );
+
+		if (row.status === "ACCEPTED") {
+			return <strong style={{ color: "green" }}>Demande enregistrée</strong>;
+		}
+
+		return <span>{cell}</span>;
+	};
+
+	function teamBt(cell, row) {
+		if (row.teamsUrl) {
+			return (
+				<span>
+					<strong style={{ color: "green" }}>
+						{cell}
+						Channel team ok
+					</strong>
+				</span>
+			);
+		}
+
+		return <span>Pas de canal Team </span>;
+	}
+
+	// Colonnes du tableau
+	const columns = [
+		{
+			dataField: "label",
+			text: "Projet",
+			sort: true,
+		},
+		{ dataField: "serviceOffer", text: "Besoin", sort: true },
+		{
+			dataField: "status",
+			text: "Status",
+			sort: true,
+			formatter: editRequest,
+		},
+		{ dataField: "teamsUrl", text: "Teams", formatter: teamBt },
+		// {
+		// 	dataField: "isManager",
+		// 	text: "Chef de projet",
+		// },
+	];
 
 	/* -----------------------------------
 		Tri des datas avec chef de projet
@@ -135,17 +178,10 @@ export default function Table() {
 	// array.filter((i) => i.isManager === 1);
 
 	const getDataManaged = (array) => {
-		//console.log("click CP");
 		if (toggleCp && !toggleArchi) {
 			console.log("CP on et Archi off");
 			return array.filter((i) => i.isManager === 1);
-		}
-		// else if (toggleCp && toggleArchi) {
-		// 	return array;
-		// } else if (!toggleCp && !toggleArchi) {
-		// 	return array;
-		// }
-		else {
+		} else {
 			return array;
 		}
 	};
@@ -159,8 +195,6 @@ export default function Table() {
 			return array
 				.filter((i) => i.status === "ARCHIVED")
 				.filter((i) => i.isManager === 1);
-			// } else if (!toggleCp && !toggleArchi) {
-			// 	return array;
 		} else {
 			return array;
 		}
@@ -225,29 +259,23 @@ export default function Table() {
 								<input
 									className="form-check-input"
 									type="checkbox"
-									id="flexSwitchCheckDefault"
-									onClick={() => setToggleCp(!toggleCp)}
+									id="projet"
+									onClick={handleCpMan}
 								/>
-								<label
-									className="form-check-label"
-									htmlFor="flexSwitchCheckDefault"
-								>
+								<label className="form-check-label" htmlFor="projet">
 									Chef de projet
 								</label>
 							</div>
-
+							<hr />
 							{/* Switch des projets archivés */}
 							<div className="form-check form-switch">
 								<input
 									className="form-check-input"
 									type="checkbox"
-									id="flexSwitchCheckDefault"
-									onClick={() => setToggleArchi(!toggleArchi)}
+									id="archi"
+									onClick={handleArchi}
 								/>
-								<label
-									className="form-check-label"
-									htmlFor="flexSwitchCheckDefault"
-								>
+								<label className="form-check-label" htmlFor="archi">
 									Projets archivés
 								</label>
 							</div>
@@ -255,11 +283,12 @@ export default function Table() {
 
 						<BootstrapTable
 							{...props.baseProps}
+							pagination={paginationFactory()}
 							striped
 							hover
 							bordered={false}
-							pagination={paginationFactory()}
 							rowEvents={rowEvents}
+							exportCSV
 						/>
 					</div>
 				)}

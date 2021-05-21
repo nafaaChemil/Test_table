@@ -1,6 +1,16 @@
 .ligneTab {
-	border: 1px solid;
+	//border: 1px solid;
+	.btn {
+		display: inline-block !important;
+	}
 }
+
+.table {
+	.btn {
+		display: none;
+	}
+}
+
 #filter {
 	display: flex;
 	align-items: center;
