@@ -3,7 +3,12 @@ import BootstrapTable from "react-bootstrap-table-next";
 import paginationFactory, {
 	PaginationProvider,
 	PaginationListStandalone,
+	SizePerPageDropdownStandalone,
 } from "react-bootstrap-table2-paginator";
+import filterFactory, {
+	textFilter,
+	selectFilter,
+} from "react-bootstrap-table2-filter";
 import ToolkitProvider, { Search } from "react-bootstrap-table2-toolkit";
 import { Modal, Button } from "react-bootstrap";
 
@@ -13,7 +18,7 @@ const fakeApi = {
 	1: {
 		id: 1,
 		label: "Erasmus Without Paper",
-		serviceOffer: "Applicatif",
+		serviceOffer: "Conseil",
 		status: "ACCEPTED",
 		teamsUrl: null,
 		isManager: 1,
@@ -104,10 +109,16 @@ const fakeApi = {
 const objArr = Object.values(fakeApi);
 // const objArrRaw = JSON.stringify(objArr);
 
-export default function Table() {
+export default function Table2() {
 	const [data, setData] = useState(objArr);
 	const [toggleCp, setToggleCp] = useState(false);
 	const [toggleArchi, setToggleArchi] = useState(false);
+	const [searchTerm, setSearchTerm] = useState("");
+	//const [searchResults, setSearchResults] = useState([]);
+
+	const handleChange = (event) => {
+		setSearchTerm(event.target.value);
+	};
 
 	const editRequest = (cell, row, rowIndex, formatExtraData) => {
 		// return (
@@ -184,6 +195,15 @@ export default function Table() {
 
 	//  array.filter((i) => i.status === "ARCHIVED");
 	// array.filter((i) => i.isManager === 1);
+
+	const getFiltered = (array) => {
+		return array.filter(
+			(i) =>
+				i.label.toString().toLowerCase().includes(searchTerm) ||
+				i.status.toString().toLowerCase().includes(searchTerm) ||
+				i.serviceOffer.toString().toLowerCase().includes(searchTerm)
+		);
+	};
 
 	const getDataManaged = (array) => {
 		if (toggleCp && !toggleArchi) {
@@ -269,42 +289,50 @@ export default function Table() {
 			},
 			{
 				text: "Tout",
-				value: objArr.length,
+				value: data.length,
 			},
 		], // A numeric array is also available. the purpose of above example is custom the text
 	};
 
-	// useEffect
 	useEffect(() => {
 		// let result = [...objArr];
-		let result = objArr;
 
+		//let result = objArr;
+		//let result = objArr.filter((i) => i.includes(searchTerm));
+		//let result = objArr;
+
+		let result = objArr;
+		result = getFiltered(result);
+		console.log(result);
 		result = getDataManaged(result);
 		result = getDataArchi(result);
 
 		setData(result);
-	}, [toggleArchi, toggleCp]);
+	}, [toggleArchi, toggleCp, searchTerm]);
 
 	return (
 		<div className="App">
-			<ToolkitProvider
-				bootstrap4
-				keyField="id"
-				data={data}
-				columns={columns}
-				search
+			<input
+				type="text"
+				placeholder="rechercher"
+				value={searchTerm}
+				onChange={handleChange}
+			/>
+			<PaginationProvider
+				pagination={paginationFactory({
+					custom: true,
+					page: 1,
+					sizePerPage: 10,
+					...options,
+					totalSize: data.length,
+				})}
 			>
-				{(props) => (
+				{({ paginationProps, paginationTableProps }) => (
 					<div>
+						<hr />
 						<section id="filter">
 							{/* Bar de recherche */}
-							<SearchBar
-								{...props.searchProps}
-								className="custome-search-field"
-								style={{ color: "blue" }}
-								delay={50}
-								placeholder="Rechercher"
-							/>
+
 							{/* Boutons switch */}
 							{/* Bouton switch chef de projet*/}
 							<div className="form-check form-switch">
@@ -331,20 +359,23 @@ export default function Table() {
 									Projets archivés
 								</label>
 							</div>
-						</section>
 
+							<SizePerPageDropdownStandalone {...paginationProps} />
+						</section>
 						<BootstrapTable
-							{...props.baseProps}
-							pagination={paginationFactory(options)}
-							striped
-							hover
-							bordered={false}
+							keyField="id"
+							data={data}
+							columns={columns}
+							filter={filterFactory()}
 							rowEvents={rowEvents}
-							exportCSV
+							{...paginationTableProps}
 						/>
+						<div className="col-md-6 col-xs-6 col-sm-6 col-lg-6">
+							<PaginationListStandalone {...paginationProps} />
+						</div>
 					</div>
 				)}
-			</ToolkitProvider>
+			</PaginationProvider>
 		</div>
 	);
 }

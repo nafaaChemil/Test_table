@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from "react";
+// import React, { useState, useEffect } from "react";
 
 // Data table component
 // import Datatable from "./datatable";
 import Table from "./components/table";
+import Table2 from "./components/table2";
 
 // Import du css
 import "./index.css";
@@ -23,8 +24,7 @@ export default function App() {
 
 	return (
 		<>
-			{/* <Datatable data={data} /> */}
-			<Table />
+			<Table2 />
 		</>
 	);
 }
