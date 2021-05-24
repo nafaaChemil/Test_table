@@ -3,6 +3,9 @@
 	.btn {
 		display: inline-block !important;
 	}
+	&:hover .editRequest:before {
+		content: "errr";
+	}
 }
 
 .table {
@@ -14,12 +17,12 @@
 #filter {
 	display: flex;
 	align-items: center;
-	justify-content: start;
+	justify-content: space-between;
 	margin-bottom: 1rem;
 	padding: 1rem 0;
 	label,
 	div {
-		padding-right: 1rem;
+		padding-rig
 	}
 }
 

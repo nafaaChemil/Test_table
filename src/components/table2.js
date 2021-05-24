@@ -5,15 +5,14 @@ import paginationFactory, {
 	PaginationListStandalone,
 	SizePerPageDropdownStandalone,
 } from "react-bootstrap-table2-paginator";
-import filterFactory, {
-	textFilter,
-	selectFilter,
-} from "react-bootstrap-table2-filter";
-import ToolkitProvider, { Search } from "react-bootstrap-table2-toolkit";
+import filterFactory from "react-bootstrap-table2-filter";
+
 import { Modal, Button } from "react-bootstrap";
 
+// Css
 import "./table.scss";
 
+// Data
 const fakeApi = {
 	1: {
 		id: 1,
@@ -116,9 +115,7 @@ export default function Table2() {
 	const [searchTerm, setSearchTerm] = useState("");
 	//const [searchResults, setSearchResults] = useState([]);
 
-	const handleChange = (event) => {
-		setSearchTerm(event.target.value);
-	};
+	const handleChange = (event) => setSearchTerm(event.target.value);
 
 	const editRequest = (cell, row, rowIndex, formatExtraData) => {
 		// return (
@@ -137,11 +134,11 @@ export default function Table2() {
 		// </Button>
 		// );
 
-		if (row.status === "ACCEPTED") {
-			return <strong style={{ color: "green" }}>Demande enregistrée</strong>;
+		if (row.status) {
+			return <span className="editRequest">{cell}</span>;
 		}
 
-		return <span>{cell} </span>;
+		//return <span>{cell} </span>;
 	};
 
 	function teamBt(cell, row) {
@@ -188,13 +185,9 @@ export default function Table2() {
 	/* -----------------------------------
 		Tri des datas avec chef de projet
 	----------------------------------- */
-
 	// fonction switch
 	const handleCpMan = () => setToggleCp(!toggleCp);
 	const handleArchi = () => setToggleArchi(!toggleArchi);
-
-	//  array.filter((i) => i.status === "ARCHIVED");
-	// array.filter((i) => i.isManager === 1);
 
 	const getFiltered = (array) => {
 		return array.filter(
@@ -228,8 +221,6 @@ export default function Table2() {
 		}
 	};
 
-	const { SearchBar } = Search;
-
 	const rowEvents = {
 		// onMouseEnter: (e, row, cell) => {
 		// 	e.target.style.visibility = "hidden";
@@ -239,10 +230,12 @@ export default function Table2() {
 		// 	e.target.style.visibility = "visible";
 		// },
 
-		onMouseEnter: (e, row) => {
+		onMouseEnter: (e, row, cell) => {
 			const Ligne = e.target.parentElement;
 			Ligne.classList.add("ligneTab");
-			console.log(e.target.parentElement);
+			// console.log(e.target.parentElement);
+			// console.log(cell);
+			// console.log(row);
 		},
 		onMouseLeave: (e, row) => {
 			const Ligne = e.target.parentElement;
@@ -263,7 +256,7 @@ export default function Table2() {
 	const options = {
 		paginationSize: 4,
 		pageStartIndex: 1,
-		alwaysShowAllBtns: true, // Always show next and previous button
+		//alwaysShowAllBtns: true, // Always show next and previous button
 		// withFirstAndLast: false, // Hide the going to First and Last page button
 		// hideSizePerPage: true, // Hide the sizePerPage dropdown always
 		// hidePageListOnlyOnePage: true, // Hide the pagination list when only one page
@@ -295,12 +288,6 @@ export default function Table2() {
 	};
 
 	useEffect(() => {
-		// let result = [...objArr];
-
-		//let result = objArr;
-		//let result = objArr.filter((i) => i.includes(searchTerm));
-		//let result = objArr;
-
 		let result = objArr;
 		result = getFiltered(result);
 		console.log(result);
@@ -312,12 +299,6 @@ export default function Table2() {
 
 	return (
 		<div className="App">
-			<input
-				type="text"
-				placeholder="rechercher"
-				value={searchTerm}
-				onChange={handleChange}
-			/>
 			<PaginationProvider
 				pagination={paginationFactory({
 					custom: true,
@@ -329,10 +310,18 @@ export default function Table2() {
 			>
 				{({ paginationProps, paginationTableProps }) => (
 					<div>
-						<hr />
 						<section id="filter">
 							{/* Bar de recherche */}
-
+							<div class="form-outline">
+								<input
+									type="search"
+									id="form1"
+									class="form-control"
+									placeholder="Rechercher"
+									value={searchTerm}
+									onChange={handleChange}
+								/>
+							</div>
 							{/* Boutons switch */}
 							{/* Bouton switch chef de projet*/}
 							<div className="form-check form-switch">
@@ -359,7 +348,7 @@ export default function Table2() {
 									Projets archivés
 								</label>
 							</div>
-
+							Résultats par page
 							<SizePerPageDropdownStandalone {...paginationProps} />
 						</section>
 						<BootstrapTable
