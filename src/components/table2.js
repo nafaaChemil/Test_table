@@ -5,149 +5,114 @@ import paginationFactory, {
 	PaginationListStandalone,
 	SizePerPageDropdownStandalone,
 } from "react-bootstrap-table2-paginator";
-import filterFactory from "react-bootstrap-table2-filter";
 
+import filterFactory from "react-bootstrap-table2-filter";
 import { Modal, Button } from "react-bootstrap";
 
 // Css
 import "./table.scss";
 
 // Data
-const fakeApi = {
-	1: {
-		id: 1,
-		label: "Erasmus Without Paper",
-		serviceOffer: "Conseil",
-		status: "ACCEPTED",
-		teamsUrl: null,
-		isManager: 1,
-	},
-	2: {
-		id: 2,
-		label: "Montée de version Kelio",
-		serviceOffer: "Applicatif",
-		status: "ANALYSED",
-		teamsUrl: null,
-		isManager: 0,
-	},
-	3: {
-		id: 3,
-		label: "MarketPlace",
-		serviceOffer: "Applicatif",
-		status: "ARCHIVED",
-		teamsUrl: null,
-		isManager: 0,
-	},
-	4: {
-		id: 4,
-		label: "Réforme MBAs - Optimisation Process",
-		serviceOffer: "Applicatif",
-		status: "ANALYSED",
-		teamsUrl: null,
-		isManager: 0,
-	},
-	5: {
-		id: 5,
-		label: "Relance des convention de stages non signées",
-		serviceOffer: "Applicatif",
-		status: "ANALYSED",
-		teamsUrl: null,
-		isManager: 0,
-	},
-	6: {
-		id: 6,
-		label: "Relance des convention de stages non signées",
-		serviceOffer: "Applicatif",
-		status: "ANALYSED",
-		teamsUrl: null,
-		isManager: 0,
-	},
-	7: {
-		id: 7,
-		label: "Relance des convention de stages non signées",
-		serviceOffer: "Applicatif",
-		status: "ANALYSED",
-		teamsUrl: null,
-		isManager: 0,
-	},
-	8: {
-		id: 8,
-		label: "Relance des convention de stages non signées",
-		serviceOffer: "Applicatif",
-		status: "REGISTERED",
-		teamsUrl: null,
-		isManager: 0,
-	},
-	9: {
-		id: 9,
-		label: "Relance des convention de stages non signées",
-		serviceOffer: "Applicatif",
-		status: "ANALYSED",
-		teamsUrl: true,
-		isManager: 0,
-	},
-	10: {
-		id: 10,
-		label: "Relance des convention de stages non signées",
-		serviceOffer: "Applicatif",
-		status: "ARCHIVED",
-		teamsUrl: null,
-		isManager: 1,
-	},
-	11: {
-		id: 11,
-		label: "Relance des convention de stages non signées",
-		serviceOffer: "Conseil",
-		status: "ANALYSED",
-		teamsUrl: null,
-		isManager: 0,
-	},
-};
+const originApi = {
+    "1": {
+        "id": 1,
+        "label": "Erasmus Without Paper",
+        "serviceOffer": "Applicatif",
+        "status": "Projet archivé",
+        "teamsUrl": "http://google.com",
+        "isManager": 0
+    },
+    "2": {
+        "id": 2,
+        "label": "Montée de version Kelio",
+        "serviceOffer": "Applicatif",
+        "status": "Demande en cours d'analyse",
+        "teamsUrl": null,
+        "isManager": 0
+    },
+    "3": {
+        "id": 3,
+        "label": "MarketPlace",
+        "serviceOffer": "Applicatif",
+        "status": "Demande en cours d'analyse",
+        "teamsUrl": null,
+        "isManager": 0
+    },
+    "4": {
+        "id": 4,
+        "label": "Réforme MBAs - Optimisation Process",
+        "serviceOffer": "Applicatif",
+        "status": "Demande en cours d'analyse",
+        "teamsUrl": null,
+        "isManager": 0
+    },
+    "5": {
+        "id": 5,
+        "label": "Relance des convention de stages non signées",
+        "serviceOffer": "Applicatif",
+        "status": "Demande en cours d'analyse",
+        "teamsUrl": null,
+        "isManager": 0
+    },
+    "6": {
+        "id": 6,
+        "label": "Archve",
+        "serviceOffer": "Applicatif",
+        "status": "Demande en cours d'analyse",
+        "teamsUrl": "http://google.com",
+        "isManager": 0
+    },
+    "7": {
+        "id": 7,
+        "label": "zer",
+        "serviceOffer": "Applicatif",
+        "status": "Demande enregistrée",
+        "teamsUrl": null,
+        "isManager": 0
+    }
+
+}
+
+const objOriginArr = Object.values(originApi);
+const statusUpdate = (oldStat, status, arr) => arr.map(item => (item.status === oldStat) ? {...item, status} : item )
+
+let objArr = statusUpdate("ACCEPTED","Approuvé",objOriginArr)
 
 // Transformation de l'objet en array itérable
-const objArr = Object.values(fakeApi);
 // const objArrRaw = JSON.stringify(objArr);
-
 export default function Table2() {
 	const [data, setData] = useState(objArr);
 	const [toggleCp, setToggleCp] = useState(false);
 	const [toggleArchi, setToggleArchi] = useState(false);
 	const [searchTerm, setSearchTerm] = useState("");
-	//const [searchResults, setSearchResults] = useState([]);
-
+	const [wordRes, setWordRes] = useState("");
 	const handleChange = (event) => setSearchTerm(event.target.value);
-
 	const editRequest = (cell, row, rowIndex, formatExtraData) => {
-		// return (
-		// 	<span>
-		// 		<strong style={{ color: "red" }}>{cell} </strong>
-		// 	</span>
-
-		// <Button
-		// 	onClick={() => {
-		// 		//  this.onFollowChanged(row);
-		// 		console.log("klfd");
-		// 	}}
-		// >
-		// 	{" "}
-		// 	Status
-		// </Button>
-		// );
 
 		if (row.status) {
-			return <span className="editRequest">{cell}</span>;
+			return (
+				<>
+					<span className="status">{cell}</span>
+					<a role="button" className="btn btn-info editRequest" target="_self" href={`/adresse/${row.id}`}>Modifier la demande </a>
+					</>
+			);
 		}
 
-		//return <span>{cell} </span>;
 	};
+
+	const linkProj = (cell, row, rowIndex, formatExtraData) => {
+		if (row.label) {
+			return <a target="_self" href={`/adresseProj/${row.id}`}> {cell} </a>
+		}
+	};
+
 
 	function teamBt(cell, row) {
 		if (row.teamsUrl) {
 			return (
 				<span>
 					<strong style={{ color: "green" }}>
-						{cell}
-						{/* Channel team ok */}
+					 <a target="_self" href={`${cell}`}> Lien team </a>
 					</strong>
 				</span>
 			);
@@ -155,8 +120,7 @@ export default function Table2() {
 
 		return (
 			<span>
-				{/* {cell} */}
-				Pas de canal Team
+				{/* {cell} */} Pas de canal Team
 			</span>
 		);
 	}
@@ -165,8 +129,14 @@ export default function Table2() {
 	const columns = [
 		{
 			dataField: "label",
-			text: "Projet",
-			sort: true,
+			text:"Projet",
+			sort:true,
+			formatter:linkProj,
+			// 	if (!order) return (<span className="arrow"> &darr;  <span> &uarr;  </span></span>);
+			// 	else if (order === 'asc') return (<span className="arrow"> &darr;  <span className="selected"> &uarr;  </span></span>); 
+			// 	else if (order === 'desc') return (<span className="arrow">  <span className="selected"> &darr; </span> &uarr; </span>);
+			// 	return null;
+			//   }
 		},
 		{ dataField: "serviceOffer", text: "Besoin", sort: true },
 		{
@@ -185,10 +155,10 @@ export default function Table2() {
 	/* -----------------------------------
 		Tri des datas avec chef de projet
 	----------------------------------- */
+
 	// fonction switch
 	const handleCpMan = () => setToggleCp(!toggleCp);
 	const handleArchi = () => setToggleArchi(!toggleArchi);
-
 	const getFiltered = (array) => {
 		return array.filter(
 			(i) =>
@@ -202,16 +172,14 @@ export default function Table2() {
 		if (toggleCp && !toggleArchi) {
 			console.log("CP on et Archi off");
 			return array.filter((i) => i.isManager === 1);
-		} else {
-			return array;
-		}
+		} else {return array}
 	};
 
 	const getDataArchi = (array) => {
 		//console.log("click ARCHI");
 		if (!toggleCp && toggleArchi) {
 			console.log("Archi on et Cp off");
-			return array.filter((i) => i.status === "ARCHIVED");
+			return array.filter((i) => i.status === "Projet archivé");
 		} else if (toggleCp && toggleArchi) {
 			return array
 				.filter((i) => i.status === "ARCHIVED")
@@ -222,20 +190,9 @@ export default function Table2() {
 	};
 
 	const rowEvents = {
-		// onMouseEnter: (e, row, cell) => {
-		// 	e.target.style.visibility = "hidden";
-		// },
-		// onMouseLeave: (e) => {
-		// 	//console.log(row.teamsUrl);
-		// 	e.target.style.visibility = "visible";
-		// },
-
 		onMouseEnter: (e, row, cell) => {
 			const Ligne = e.target.parentElement;
 			Ligne.classList.add("ligneTab");
-			// console.log(e.target.parentElement);
-			// console.log(cell);
-			// console.log(row);
 		},
 		onMouseLeave: (e, row) => {
 			const Ligne = e.target.parentElement;
@@ -290,11 +247,11 @@ export default function Table2() {
 	useEffect(() => {
 		let result = objArr;
 		result = getFiltered(result);
-		console.log(result);
 		result = getDataManaged(result);
 		result = getDataArchi(result);
 
 		setData(result);
+		setWordRes(result.length)
 	}, [toggleArchi, toggleCp, searchTerm]);
 
 	return (
@@ -311,8 +268,9 @@ export default function Table2() {
 				{({ paginationProps, paginationTableProps }) => (
 					<div>
 						<section id="filter">
-							{/* Bar de recherche */}
-							<div class="form-outline">
+							{/* Bar de recherche */}								
+								<div className="searchBar">
+								<div class="form-outline">
 								<input
 									type="search"
 									id="form1"
@@ -322,8 +280,11 @@ export default function Table2() {
 									onChange={handleChange}
 								/>
 							</div>
+								Vous avez {wordRes} élément(s) dans la liste
+					</div>
 							{/* Boutons switch */}
-							{/* Bouton switch chef de projet*/}
+					<div className="switch">
+									{/* Bouton switch chef de projet*/}
 							<div className="form-check form-switch">
 								<input
 									className="form-check-input"
@@ -331,10 +292,9 @@ export default function Table2() {
 									id="projet"
 									onClick={handleCpMan}
 								/>
-								<label className="form-check-label" htmlFor="projet">
-									Chef de projet
-								</label>
+								<label className="form-check-label" htmlFor="projet">Chef de projet</label>
 							</div>
+
 							<hr />
 							{/* Switch des projets archivés */}
 							<div className="form-check form-switch">
@@ -348,8 +308,12 @@ export default function Table2() {
 									Projets archivés
 								</label>
 							</div>
-							Résultats par page
+								</div>
+							
+							<div>
+							&#124; &nbsp; Résultats par page &nbsp; 
 							<SizePerPageDropdownStandalone {...paginationProps} />
+							</div>
 						</section>
 						<BootstrapTable
 							keyField="id"
@@ -357,6 +321,7 @@ export default function Table2() {
 							columns={columns}
 							filter={filterFactory()}
 							rowEvents={rowEvents}
+							classes="table-striped"
 							{...paginationTableProps}
 						/>
 						<div className="col-md-6 col-xs-6 col-sm-6 col-lg-6">
