@@ -7,81 +7,28 @@ import paginationFactory, {
 } from "react-bootstrap-table2-paginator";
 
 import filterFactory from "react-bootstrap-table2-filter";
-import { Modal, Button } from "react-bootstrap";
-
-// Css
-import "./table.scss";
-
 // Images
 import teamOk from "../images/teamOk.svg";
 import teamKo from "../images/teamKo.svg";
 import icoApp from "../images/ico-application.svg";
 
-// Data
-const originApi = {
-	1: {
-		id: 1,
-		label: "Erasmus Without Paper",
-		serviceOffer: "Applicatif",
-		status: "Projet archivé",
-		teamsUrl: "http://google.com",
-		isManager: 1,
-	},
-	2: {
-		id: 2,
-		label: "Montée de version Kelio",
-		serviceOffer: "Applicatif",
-		status: "Demande en cours d'analyse",
-		teamsUrl: null,
-		isManager: 0,
-	},
-	3: {
-		id: 3,
-		label: "MarketPlace",
-		serviceOffer: "Applicatif",
-		status: "Projet archivé",
-		teamsUrl: null,
-		isManager: 0,
-	},
-	4: {
-		id: 4,
-		label: "Réforme MBAs - Optimisation Process",
-		serviceOffer: "Applicatif",
-		status: "Demande en cours d'analyse",
-		teamsUrl: null,
-		isManager: 0,
-	},
-	5: {
-		id: 5,
-		label: "Relance des convention de stages non signées",
-		serviceOffer: "Applicatif",
-		status: "Demande en cours d'analyse",
-		teamsUrl: null,
-		isManager: 0,
-	},
-	6: {
-		id: 6,
-		label: "Archve",
-		serviceOffer: "Applicatif",
-		status: "Demande en cours d'analyse",
-		teamsUrl: "http://google.com",
-		isManager: 0,
-	},
-	7: {
-		id: 7,
-		label: "zer",
-		serviceOffer: "Applicatif",
-		status: "Demande enregistrée",
-		teamsUrl: null,
-		isManager: 0,
-	},
-};
+// Css
+import "./table.scss";
 
-const objOriginArr = Object.values(originApi);
-console.log(JSON.stringify(objOriginArr));
+require("es6-promise").polyfill();
+require("isomorphic-fetch");
+//import { Modal, Button } from "react-bootstrap";
+
+let myObj;
+fetch("https://mocki.io/v1/ebd15117-dfce-4425-883b-64ab0879bef5")
+	.then((response) => response.json())
+	.then((dataApi) => (myObj = dataApi))
+	.then(() => console.log(myObj));
+
+// const objOriginArr = Object.values(dataArr);
 
 export default function Table2() {
-	const [data, setData] = useState([]);
+	const [data, setData] = useState(myObj);
 	const [toggleCp, setToggleCp] = useState(false);
 	const [toggleArchi, setToggleArchi] = useState(false);
 	const [searchTerm, setSearchTerm] = useState("");
@@ -143,7 +90,7 @@ export default function Table2() {
 	}
 
 	function icoBesoin(cell, row) {
-		if (row.serviceOffer == "Applicatif") {
+		if (row.serviceOffer === "Applicatif") {
 			return (
 				<span>
 					<img src={icoApp} alt="canal-team" /> &nbsp; {cell}
@@ -256,11 +203,11 @@ export default function Table2() {
 				text: "Tout",
 				value: data.length,
 			},
-		], // A numeric array is also available. the purpose of above example is custom the text
+		],
 	};
 
+	let result = myObj;
 	useEffect(() => {
-		let result = objOriginArr;
 		result = getFiltered(result);
 		result = getDataManaged(result);
 		result = getDataArchi(result);
@@ -277,7 +224,6 @@ export default function Table2() {
 					page: 1,
 					sizePerPage: 10,
 					...options,
-					totalSize: data.length,
 				})}
 			>
 				{({ paginationProps, paginationTableProps }) => (
