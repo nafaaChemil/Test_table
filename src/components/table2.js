@@ -9,8 +9,16 @@ import paginationFactory, {
 import filterFactory from "react-bootstrap-table2-filter";
 import { Modal, Button } from "react-bootstrap";
 
+
+
 // Css
 import "./table.scss";
+
+// Images
+import teamOk from '../images/teamOk.svg'
+import teamKo from '../images/teamKo.svg'
+import icoApp from '../images/ico-application.svg'
+
 
 // Data
 const originApi = {
@@ -20,7 +28,7 @@ const originApi = {
         "serviceOffer": "Applicatif",
         "status": "Projet archivé",
         "teamsUrl": "http://google.com",
-        "isManager": 0
+        "isManager": 1
     },
     "2": {
         "id": 2,
@@ -34,7 +42,7 @@ const originApi = {
         "id": 3,
         "label": "MarketPlace",
         "serviceOffer": "Applicatif",
-        "status": "Demande en cours d'analyse",
+        "status": "Projet archivé",
         "teamsUrl": null,
         "isManager": 0
     },
@@ -74,14 +82,12 @@ const originApi = {
 }
 
 const objOriginArr = Object.values(originApi);
-const statusUpdate = (oldStat, status, arr) => arr.map(item => (item.status === oldStat) ? {...item, status} : item )
 
-let objArr = statusUpdate("ACCEPTED","Approuvé",objOriginArr)
 
-// Transformation de l'objet en array itérable
-// const objArrRaw = JSON.stringify(objArr);
+
+
 export default function Table2() {
-	const [data, setData] = useState(objArr);
+	const [data, setData] = useState(objOriginArr);
 	const [toggleCp, setToggleCp] = useState(false);
 	const [toggleArchi, setToggleArchi] = useState(false);
 	const [searchTerm, setSearchTerm] = useState("");
@@ -92,8 +98,10 @@ export default function Table2() {
 		if (row.status) {
 			return (
 				<>
-					<span className="status">{cell}</span>
-					<a role="button" className="btn btn-info editRequest" target="_self" href={`/adresse/${row.id}`}>Modifier la demande </a>
+					<span className="status btn" role="button">{cell}</span>
+					<a role="button" className="btn btn-info editRequest" target="_self" href={`/adresse/${row.id}`}>
+						Modifier la demande 
+						</a>
 					</>
 			);
 		}
@@ -102,7 +110,7 @@ export default function Table2() {
 
 	const linkProj = (cell, row, rowIndex, formatExtraData) => {
 		if (row.label) {
-			return <a target="_self" href={`/adresseProj/${row.id}`}> {cell} </a>
+			return <a target="_self" href={`/adresseProj/${row.id}`} title="Détails de la demande"> {cell} </a>
 		}
 	};
 
@@ -112,7 +120,8 @@ export default function Table2() {
 			return (
 				<span>
 					<strong style={{ color: "green" }}>
-					 <a target="_self" href={`${cell}`}> Lien team </a>
+					 <a target="_blank" href={`${cell}`}> 
+					 <img src={teamOk} alt="canal-team" /> </a>
 					</strong>
 				</span>
 			);
@@ -120,10 +129,29 @@ export default function Table2() {
 
 		return (
 			<span>
-				{/* {cell} */} Pas de canal Team
+				 <img src={teamKo} alt="canal-team-off" />
 			</span>
 		);
 	}
+
+
+	function icoBesoin(cell, row) {
+		if (row.serviceOffer == "Applicatif") {
+			return (
+				<span>
+				
+					<img src={icoApp} alt="canal-team" /> &nbsp; {cell}
+				</span>
+			);
+		}
+
+		return (
+			<span>
+				 {cell}
+			</span>
+		);
+	}
+
 
 	// Colonnes du tableau
 	const columns = [
@@ -132,13 +160,9 @@ export default function Table2() {
 			text:"Projet",
 			sort:true,
 			formatter:linkProj,
-			// 	if (!order) return (<span className="arrow"> &darr;  <span> &uarr;  </span></span>);
-			// 	else if (order === 'asc') return (<span className="arrow"> &darr;  <span className="selected"> &uarr;  </span></span>); 
-			// 	else if (order === 'desc') return (<span className="arrow">  <span className="selected"> &darr; </span> &uarr; </span>);
-			// 	return null;
-			//   }
 		},
-		{ dataField: "serviceOffer", text: "Besoin", sort: true },
+		{ dataField: "serviceOffer", text: "Besoin", sort: true,
+		formatter: icoBesoin },
 		{
 			dataField: "status",
 			text: "Status",
@@ -146,10 +170,7 @@ export default function Table2() {
 			formatter: editRequest,
 		},
 		{ dataField: "teamsUrl", text: "Teams", formatter: teamBt },
-		// {
-		// 	dataField: "isManager",
-		// 	text: "Chef de projet",
-		// },
+
 	];
 
 	/* -----------------------------------
@@ -179,27 +200,16 @@ export default function Table2() {
 		//console.log("click ARCHI");
 		if (!toggleCp && toggleArchi) {
 			console.log("Archi on et Cp off");
-			return array.filter((i) => i.status === "Projet archivé");
+			return array.filter((i) => i.status.includes("archivé"));
 		} else if (toggleCp && toggleArchi) {
 			return array
-				.filter((i) => i.status === "ARCHIVED")
+				.filter((i) => i.status.includes("archivé"))
 				.filter((i) => i.isManager === 1);
 		} else {
 			return array;
 		}
 	};
 
-	const rowEvents = {
-		onMouseEnter: (e, row, cell) => {
-			const Ligne = e.target.parentElement;
-			Ligne.classList.add("ligneTab");
-		},
-		onMouseLeave: (e, row) => {
-			const Ligne = e.target.parentElement;
-			Ligne.classList.remove("ligneTab");
-			console.log(e.target.parentElement);
-		},
-	};
 
 	const customTotal = (from, to, size) => (
 		<span
@@ -245,7 +255,14 @@ export default function Table2() {
 	};
 
 	useEffect(() => {
-		let result = objArr;
+
+
+
+
+
+
+
+		let result = objOriginArr;
 		result = getFiltered(result);
 		result = getDataManaged(result);
 		result = getDataArchi(result);
@@ -255,7 +272,7 @@ export default function Table2() {
 	}, [toggleArchi, toggleCp, searchTerm]);
 
 	return (
-		<div className="App">
+		<div className="App table-responsive">
 			<PaginationProvider
 				pagination={paginationFactory({
 					custom: true,
@@ -311,7 +328,7 @@ export default function Table2() {
 								</div>
 							
 							<div>
-							&#124; &nbsp; Résultats par page &nbsp; 
+							 &nbsp; Résultats par page &nbsp; 
 							<SizePerPageDropdownStandalone {...paginationProps} />
 							</div>
 						</section>
@@ -320,11 +337,9 @@ export default function Table2() {
 							data={data}
 							columns={columns}
 							filter={filterFactory()}
-							rowEvents={rowEvents}
-							classes="table-striped"
 							{...paginationTableProps}
 						/>
-						<div className="col-md-6 col-xs-6 col-sm-6 col-lg-6">
+						<div className="col-md-12 col-xs-12 col-sm-12 col-lg-12">
 							<PaginationListStandalone {...paginationProps} />
 						</div>
 					</div>

@@ -3,7 +3,7 @@
 // Data table component
 // import Datatable from "./datatable";
 import Table from "./components/table";
-import Table2 from "./components/table2";
+import Table2 from "./components/tableApi";
 
 // Import du css
 import "./index.css";

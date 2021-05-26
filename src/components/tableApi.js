@@ -5,33 +5,58 @@ import paginationFactory, {
     PaginationListStandalone,
     SizePerPageDropdownStandalone,
 } from "react-bootstrap-table2-paginator";
+import axios from 'axios';
 
 import filterFactory from "react-bootstrap-table2-filter";
 import { Modal, Button } from "react-bootstrap";
 
 
 
-/*
-// Css
-import "./table.scss";
-
-// Images
-import teamOk from '../images/teamOk.svg'
-import teamKo from '../images/teamKo.svg'
-import icoApp from '../images/ico-application.svg'
-*/
-
-
-
-
-
 const urlHost = window.location.hostname;
-const apiUrl = `http://${urlHost}/api/digital_factory/project/list`;
+//const apiUrl = `http://${urlHost}/api/digital_factory/project/list`;
+const apiUrl = `https://random-data-api.com/api/internet_stuff/random_internet_stuff?size=10`;
+
+let Data = [];
+(async () => {
+    let data;
+    function status() {
+      const url = "https://random-data-api.com/api/internet_stuff/random_internet_stuff?size=10";
+      return axios.get(url).then((resp) => {
+        return resp.data;
+      });
+    }
+    data = await status();
+    //console.log(data)
+    Data.push(...data)
+
+  })();
+
+
+console.log(Data.data)
+
+
+//   const fetchData2 = async () => {
+//     let resOne = await fetch(apiUrl)
+//     let responseOne = await resOne.json();
+//     let resOneArr = Object.values(responseOne)
+//   //  console.log(resOneArr)
+//    return resOneArr
+// }
+// fetchData2();
+
+// let Data = resOneArr;
+// console.log(Data)
+
+
 
 
 
 export default function Table2() {
-    const [data, setData] = useState(objOriginArr);
+
+
+
+
+    const [data, setData] = useState([]);
     const [toggleCp, setToggleCp] = useState(false);
     const [toggleArchi, setToggleArchi] = useState(false);
     const [searchTerm, setSearchTerm] = useState("");
@@ -65,7 +90,8 @@ export default function Table2() {
                 <span>
 					<strong style={{ color: "green" }}>
 					 <a target="_blank" href={`${cell}`}>
-					 <img src={teamOk} alt="canal-team" /> </a>
+					 {/*<img src={teamOk} alt="canal-team" /> */}
+                         Canal on </a>
 					</strong>
 				</span>
             );
@@ -73,7 +99,8 @@ export default function Table2() {
 
         return (
             <span>
-				 <img src={teamKo} alt="canal-team-off" />
+				 {/*<img src={teamKo} alt="canal-team-off" /> */}
+                Canal off
 			</span>
         );
     }
@@ -84,7 +111,8 @@ export default function Table2() {
             return (
                 <span>
 
-					<img src={icoApp} alt="canal-team" /> &nbsp; {cell}
+					{/*<img src={icoApp} alt="canal-team" /> */}
+                    &nbsp; {cell}
 				</span>
             );
         }
@@ -97,31 +125,20 @@ export default function Table2() {
     }
 
 
-    // Colonnes du tableau
+
     const columns = [
         {
-            dataField: "label",
-            text:"Projet",
+            dataField: "email",
+            text:"Email",
             sort:true,
-            formatter:linkProj,
         },
-        { dataField: "serviceOffer", text: "Besoin", sort: true,
-            formatter: icoBesoin },
-        {
-            dataField: "status",
-            text: "Status",
-            sort: true,
-            formatter: editRequest,
-        },
-        { dataField: "teamsUrl", text: "Teams", formatter: teamBt },
+
 
     ];
 
-    /* -----------------------------------
-        Tri des datas avec chef de projet
-    ----------------------------------- */
 
-    // fonction switch
+
+
     const handleCpMan = () => setToggleCp(!toggleCp);
     const handleArchi = () => setToggleArchi(!toggleArchi);
     const getFiltered = (array) => {
@@ -199,21 +216,14 @@ export default function Table2() {
     };
 
 
-	const fetchData2 = async () => {
-		let resOne = await fetch(apiUrl)
-		let responseOne = await resOne.json();
-		let resOneArr = Object.values(responseOne)
-	   return resOneArr
-	}
-
 
     useEffect(() => {
 
-		fetchData2()
-        let result = resOneArr;
-        result = getFiltered(result);
-        result = getDataManaged(result);
-        result = getDataArchi(result);
+
+        let result = Object.values(Data)
+        // result = getFiltered(result);
+        // result = getDataManaged(result);
+        // result = getDataArchi(result);
 
         setData(result);
         setWordRes(result.length)

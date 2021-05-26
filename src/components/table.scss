@@ -1,40 +1,67 @@
-.react-bootstrap-table {
+
+
+.table {
+	min-width: 1220px;
+		.btn {
+			display: none;
+	}
+	
 	td {
 		vertical-align: middle;
 	   }
-}
-
-.editRequest {
-	//visibility: hidden;
-	opacity: 0;
-	transform: translate(0, -2%);
-}
-
-.ligneTab {
-	//border: 1px solid;
-	.btn {
-		display: inline-block !important;
+	   .btn-info {
+		color: white;
+		font-weight: bold;
+		border: transparent;
+	}
+	.editRequest.btn {
+		border: 1px solid transparent;
+		transition: opacity 1s ease-out;
+		opacity: 0;
+		height: 0;
+		overflow: hidden;
+		transition: all .1s ease;
 	}
 
-	&:hover .editRequest {
-		//visibility: visible;						
+	.status.btn {
+		display: inline-flex;
+		border: 1px solid transparent;
+		padding-left: 0;
+		transition: all .6s ease-in;
+	}
+
+}
+
+
+.table tr:hover {
+	cursor: pointer;
+	background-color: rgb(235, 235, 235);
+	.status.btn {
+		display: none;
+	}
+
+
+	.btn.editRequest{
+		display: inline-flex;
+		border: 1px solid transparent;
+		background: blue;
+		color: white;
+		font-weight: bold;	
 		opacity: 1;
-		transform: translate(0, 0%);
-		transition: all 2s ease-in;
+		height: auto;
+
+		&:hover{
+			border-color: blue;
+		}
 	}
-	&:hover .status {
-		display: none;
-		visibility: hidden;
-	}
+
+
 }
 
-.table {
-	.btn {
-		display: none;
-	}
-}
+
 
 #filter {
+	min-width: 1220px;
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
@@ -73,4 +100,8 @@
 	display: inline-flex;
 	justify-content: center;
 	align-items: center;
+}
+
+
+.react-bootstrap-table-page-btns-ul {
 }
