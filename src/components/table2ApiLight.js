@@ -84,12 +84,17 @@ require("isomorphic-fetch");
 
 const apiUrl = "https://mocki.io/v1/ebd15117-dfce-4425-883b-64ab0879bef5";
 
-let obj2 = [];
-fetch(apiUrl)
-	.then((res) => res.json())
-	.then((data) => obj2.push(...data))
-	.then((res) => (res.ok ? console.log("ok") : console.log("ko", obj2)));
+let obj2;
 
+async function fetchDataJson() {
+	const response = await fetch(apiUrl);
+	const DataJson = await response.json();
+	return DataJson;
+}
+
+fetchDataJson().then((DataJson) => (obj2 = DataJson));
+
+// Début de l'application
 export default function Table2() {
 	const [data, setData] = useState(obj2);
 	const [dataL, setDataL] = useState();
@@ -273,19 +278,17 @@ export default function Table2() {
 
 	useEffect(() => {
 		let result;
-		// console.log(typeof result);
-		// console.log(obj2);
-		// result = Object.values(obj2[0]);
+
 		result = obj2;
+		console.log(obj2.length);
 
 		result = getFiltered(result);
 		result = getDataManaged(result);
 		result = getDataArchi(result);
-		console.log("je joue");
+
 		setData(result);
 		setWordRes(result.length);
 		setDataL(result.length);
-		console.log(obj2);
 	}, [toggleArchi, toggleCp, searchTerm]);
 
 	return (
@@ -351,6 +354,7 @@ export default function Table2() {
 								<SizePerPageDropdownStandalone {...paginationProps} />
 							</div>
 						</section>
+
 						<BootstrapTable
 							keyField="id"
 							data={data}

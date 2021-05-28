@@ -261,6 +261,7 @@ export default function Table2() {
 
 	useEffect(() => {
 		let result = objOriginArr;
+		console.log(objOriginArr);
 		result = getFiltered(result);
 		result = getDataManaged(result);
 		result = getDataArchi(result);

@@ -2,9 +2,11 @@
 
 // Data table component
 // import Datatable from "./datatable";
-import Table from "./components/table";
+// import Table from "./components/table";
 // import Table2 from "./components/table2";
-import Table2 from "./components/table2Api";
+// import Table2 from "./components/table2Api";
+import Table2 from "./components/table3ApiAxios";
+// import Table2 from "./components/table2ApiLight";
 
 // Import du css
 import "./index.css";
