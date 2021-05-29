@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
 import BootstrapTable from "react-bootstrap-table-next";
 import paginationFactory, {
 	PaginationProvider,
