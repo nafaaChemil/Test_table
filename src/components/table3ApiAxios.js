@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
 import BootstrapTable from "react-bootstrap-table-next";
 import paginationFactory, {
 	PaginationProvider,
@@ -225,9 +224,13 @@ export default function Table2() {
 
 	const getDataArchi = (array) => {
 		//console.log("click ARCHI");
+		if (!toggleCp && !toggleArchi) {
+			console.log("Archi off et Cp off");
+			return array.filter((i) => !i.status.includes("archivé"));
+		}else 
 		if (!toggleCp && toggleArchi) {
 			console.log("Archi on et Cp off");
-			return array.filter((i) => i.status.includes("archivé"));
+			return array
 		} else if (toggleCp && toggleArchi) {
 			return array
 				.filter((i) => i.status.includes("archivé"))
@@ -288,6 +291,7 @@ export default function Table2() {
 
 				let result = DataJson;
 				setObjCharged(true);
+				setData2(result);
 
 				result = getFiltered(result);
 				result = getDataManaged(result);
@@ -295,7 +299,7 @@ export default function Table2() {
 				setData(result);
 				setWordRes(result.length);
 				setDataL(result.length);
-				setData2(result);
+				console.log(result)
 			}
 			fetchDataJson();
 		} else {
