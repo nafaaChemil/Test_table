@@ -18,70 +18,8 @@ import "./table.scss";
 
 require("es6-promise").polyfill();
 require("isomorphic-fetch");
-//import { Modal, Button } from "react-bootstrap";
 
-// const originApi = {
-// 	1: {
-// 		id: 1,
-// 		label: "Erasmus Without Paper",
-// 		serviceOffer: "Applicatif",
-// 		status: "Projet archivé",
-// 		teamsUrl: "http://google.com",
-// 		isManager: 1,
-// 	},
-// 	2: {
-// 		id: 2,
-// 		label: "Montée de version Kelio",
-// 		serviceOffer: "Applicatif",
-// 		status: "Demande en cours d'analyse",
-// 		teamsUrl: null,
-// 		isManager: 0,
-// 	},
-// 	3: {
-// 		id: 3,
-// 		label: "MarketPlace",
-// 		serviceOffer: "Applicatif",
-// 		status: "Projet archivé",
-// 		teamsUrl: null,
-// 		isManager: 0,
-// 	},
-// 	4: {
-// 		id: 4,
-// 		label: "Réforme MBAs - Optimisation Process",
-// 		serviceOffer: "Applicatif",
-// 		status: "Demande en cours d'analyse",
-// 		teamsUrl: null,
-// 		isManager: 0,
-// 	},
-// 	5: {
-// 		id: 5,
-// 		label: "Relance des convention de stages non signées",
-// 		serviceOffer: "Applicatif",
-// 		status: "Demande en cours d'analyse",
-// 		teamsUrl: null,
-// 		isManager: 0,
-// 	},
-// 	6: {
-// 		id: 6,
-// 		label: "Archve",
-// 		serviceOffer: "Applicatif",
-// 		status: "Demande en cours d'analyse",
-// 		teamsUrl: "http://google.com",
-// 		isManager: 0,
-// 	},
-// 	7: {
-// 		id: 7,
-// 		label: "zer",
-// 		serviceOffer: "Applicatif",
-// 		status: "Demande enregistrée",
-// 		teamsUrl: null,
-// 		isManager: 0,
-// 	},
-// };
-
-// myObj = Object.values(originApi);
-
-const apiUrl = "https://mocki.io/v1/ebd15117-dfce-4425-883b-64ab0879bef5";
+const apiUrl = "https://mocki.io/v1/9a7ea71c-d744-4862-8643-4ddd23a31ff8";
 
 export default function Table2() {
 	let obj = [];

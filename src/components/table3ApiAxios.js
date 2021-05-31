@@ -81,7 +81,7 @@ require("isomorphic-fetch");
 
 // myObj = Object.values(originApi);
 
-const apiUrl = "https://mocki.io/v1/ebd15117-dfce-4425-883b-64ab0879bef5";
+const apiUrl = "https://mocki.io/v1/9a7ea71c-d744-4862-8643-4ddd23a31ff8";
 
 export default function Table2() {
 	let obj = [];
@@ -216,7 +216,8 @@ export default function Table2() {
 	const getDataManaged = (array) => {
 		if (toggleCp && !toggleArchi) {
 			console.log("CP on et Archi off");
-			return array.filter((i) => i.isManager === 1);
+			return array.filter((i) => i.isManager === 1)
+			.filter((i) => !i.status.includes("archivé"));
 		} else {
 			return array;
 		}
@@ -232,9 +233,9 @@ export default function Table2() {
 			console.log("Archi on et Cp off");
 			return array
 		} else if (toggleCp && toggleArchi) {
-			return array
-				.filter((i) => i.status.includes("archivé"))
-				.filter((i) => i.isManager === 1);
+			return array.filter((i) => i.isManager === 1)
+
+
 		} else {
 			return array;
 		}
