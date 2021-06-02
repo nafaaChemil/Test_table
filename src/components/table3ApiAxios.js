@@ -91,7 +91,7 @@ export default function Table2() {
 
 	const [objCharged, setObjCharged] = useState(false);
 
-	const [dataL, setDataL] = useState();
+	const [dataL, setDataL] = useState(0);
 	const [toggleCp, setToggleCp] = useState(false);
 	const [toggleArchi, setToggleArchi] = useState(false);
 	const [searchTerm, setSearchTerm] = useState("");
@@ -300,11 +300,11 @@ export default function Table2() {
 				setData(result);
 				setWordRes(result.length);
 				setDataL(result.length);
-				console.log(result)
 			}
 			fetchDataJson();
 		} else {
 			let resultStocked = data2;
+			console.log(resultStocked)
 			resultStocked = getFiltered(resultStocked);
 			resultStocked = getDataManaged(resultStocked);
 			resultStocked = getDataArchi(resultStocked);
@@ -315,82 +315,82 @@ export default function Table2() {
 	}, [toggleArchi, toggleCp, searchTerm]);
 
 	return (
-		<div className="App table-responsive">
-			<PaginationProvider
-				pagination={paginationFactory({
-					custom: true,
-					page: 1,
-					sizePerPage: 10,
-					...options,
-					totalSize: data.length,
-				})}
-			>
-				{({ paginationProps, paginationTableProps }) => (
-					<div>
-						<section id="filter">
-							{/* Bar de recherche */}
-							<div className="searchBar">
-								<div class="form-outline">
-									<input
-										type="search"
-										id="form1"
-										class="form-control"
-										placeholder="Rechercher"
-										value={searchTerm}
-										onChange={handleChange}
-									/>
-								</div>
-								Vous avez {wordRes} élément(s) dans la liste
-							</div>
-							{/* Boutons switch */}
-							<div className="switch">
-								{/* Bouton switch chef de projet*/}
-								<div className="form-check form-switch">
-									<input
-										className="form-check-input"
-										type="checkbox"
-										id="projet"
-										onClick={handleCpMan}
-									/>
-									<label className="form-check-label" htmlFor="projet">
-										Chef de projet
-									</label>
-								</div>
+<div className="App table-responsive">
+            <PaginationProvider
+                pagination={paginationFactory({
+                    custom: true,
+                    page: 1,
+                    sizePerPage: 10,
+                    ...options,
+                    totalSize: data.length,
+                })}
+            >
+                {({ paginationProps, paginationTableProps }) => (
+                    <div>
+                        <section id="filter">
+                            {/* Bar de recherche */}
+                            <div className="searchBar">
+                                <div class="form-outline">
+                                    <input
+                                        type="search"
+                                        id="form1"
+                                        class="form-control"
+                                        placeholder="Rechercher"
+                                        value={searchTerm}
+                                        onChange={handleChange}
+                                    />
+                                </div>
+                                Vous avez {wordRes} élément(s) dans la liste
+                            </div>
+                            {/* Boutons switch */}
+                            <div className="switch">
+                                {/* Bouton switch chef de projet*/}
+                                <div className="form-check form-switch">
+                                    <input
+                                        className="form-check-input"
+                                        type="checkbox"
+                                        id="projet"
+                                        onClick={handleCpMan}
+                                    />
+                                    <label className="form-check-label" htmlFor="projet">
+                                        Chef de projet
+                                    </label>
+                                </div>
 
-								<hr />
-								{/* Switch des projets archivés */}
-								<div className="form-check form-switch">
-									<input
-										className="form-check-input"
-										type="checkbox"
-										id="archi"
-										onClick={handleArchi}
-									/>
-									<label className="form-check-label" htmlFor="archi">
-										Projets archivés
-									</label>
-								</div>
-							</div>
+                                {/* Switch des projets archivés */}
+                                <div className="form-check form-switch">
+                                    <input
+                                        className="form-check-input"
+                                        type="checkbox"
+                                        id="archi"
+                                        onClick={handleArchi}
+                                    />
+                                    <label className="form-check-label" htmlFor="archi">
+                                        Projets archivés
+                                    </label>
+                                </div>
+                            </div>
 
-							<div>
-								&nbsp; Résultats par page &nbsp;
-								<SizePerPageDropdownStandalone {...paginationProps} />
-							</div>
-						</section>
+                            <div>
+                                &nbsp; Résultats par page &nbsp;
+                                <SizePerPageDropdownStandalone {...paginationProps} />
+                            </div>
+                        </section>
 
-						<BootstrapTable
-							keyField="id"
-							data={data}
-							columns={columns}
-							filter={filterFactory()}
-							{...paginationTableProps}
-						/>
-						<div className="col-md-12 col-xs-12 col-sm-12 col-lg-12">
-							<PaginationListStandalone {...paginationProps} />
-						</div>
-					</div>
-				)}
-			</PaginationProvider>
-		</div>
+                        <BootstrapTable
+                            keyField="id"
+                            data={data}
+                            columns={columns}
+                            filter={filterFactory()}
+                            {...paginationTableProps}
+                            bordered={ false }
+                        />
+                        <div className="col-md-12 col-xs-12 col-sm-12 col-lg-12">
+                            <PaginationListStandalone {...paginationProps} />
+                        </div>
+                    </div>
+                )}
+            </PaginationProvider>
+        </div>
 	);
 }
